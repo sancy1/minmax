@@ -1,0 +1,51 @@
+﻿<!--
+=====================================================================
+FILE: C:\Users\HP\Desktop\minmax\src\MinMax\MinMax.csproj
+PURPOSE: Project definition for the MinMax app. Configures the app
+         as a windowless WinExe targeting .NET 10 on Windows x64,
+         ready for single-file publish.
+RELATES TO: Program.cs (entry point), 04-Build.ps1 (reads this file
+            during publish), assets\*.ico (dynamic icon at build).
+=====================================================================
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WinExe = no console window flash when pinned to taskbar. -->
+    <OutputType>WinExe</OutputType>
+
+    <!-- Windows-only target; gives full Win32 interop access. -->
+    <TargetFramework>net10.0-windows</TargetFramework>
+
+    <!-- x64 only - ToggleDesktop is a desktop-OS feature. -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Platforms>x64</Platforms>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Produces MinMax.exe. -->
+    <AssemblyName>MinMax</AssemblyName>
+    <RootNamespace>MinMax</RootNamespace>
+
+    <!-- Version info surfaces in the exe properties dialog. -->
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Company>MinMax</Company>
+    <Product>MinMax</Product>
+    <Description>Show / restore desktop toggle for the Windows taskbar.</Description>
+
+    <!--
+    ICON HANDLING:
+    ApplicationIcon is injected at build time by 04-Build.ps1, which
+    resolves the FIRST available icon in this priority order:
+      1) assets\logo.ico
+      2) assets\app.ico
+      3) any *.ico in assets\
+    Left commented so a missing icon never breaks a fresh clone.
+    -->
+    <!-- <ApplicationIcon>..\..\assets\app.ico</ApplicationIcon> -->
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,64 @@
+﻿# =====================================================================
+# FILE: C:\Users\HP\Desktop\minmax\.github\workflows\release.yml
+# PURPOSE: GitHub Actions workflow. Triggers whenever a tag matching
+#          v* is pushed (e.g. v1.0.0). Builds MinMax.exe on a Windows
+#          runner and attaches it to a GitHub Release.
+# RELATES TO:
+#   - build\04-Build.ps1      : the actual build script
+#   - build\version.txt       : version injected into the exe
+#   - assets\*.ico            : icon used by the exe
+# NOTE: This file is dormant until you push. No action happens on
+#       plain commits; only on tag pushes.
+# =====================================================================
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'          # matches v1.0.0, v1.0.1, v2.0.0, ...
+
+# The workflow needs permission to create a Release.
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      # -----------------------------------------------------------------
+      # 1. Check out the code, including the tag that triggered us.
+      # -----------------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # -----------------------------------------------------------------
+      # 2. Install the .NET SDK. Pinned to 10.x to match the project
+      #    target framework (net10.0-windows).
+      # -----------------------------------------------------------------
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # -----------------------------------------------------------------
+      # 3. Run the same build script we use locally. Produces
+      #    dist\MinMax.exe with the icon + version already baked in.
+      # -----------------------------------------------------------------
+      - name: Build release exe
+        shell: pwsh
+        run: |
+          powershell -ExecutionPolicy Bypass -File build\04-Build.ps1
+
+      # -----------------------------------------------------------------
+      # 4. Create the GitHub Release and attach MinMax.exe.
+      #    The tag name (e.g. v1.0.0) becomes the release name.
+      # -----------------------------------------------------------------
+      - name: Create Release and upload MinMax.exe
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/MinMax.exe
+          generate_release_notes: true
+          draft: false
+          prerelease: false

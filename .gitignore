@@ -1,0 +1,32 @@
+﻿# =====================================================================
+# FILE: C:\Users\HP\Desktop\minmax\.gitignore
+# PURPOSE: Prevents build output, IDE cruft, and OS junk from ever
+#          being committed to the repository. Source code stays clean.
+# RELATES TO: Every file in src\, build\, setup\ is source and IS
+#             committed. bin\, obj\, dist\ are generated and are NOT.
+# =====================================================================
+
+# ---- .NET build output ----
+bin/
+obj/
+
+# ---- Release artifacts (built by 04-Build.ps1) ----
+dist/
+
+# ---- Visual Studio / Rider / VS Code ----
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+
+# ---- OS junk ----
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# ---- Local log/temp ----
+*.log
+*.tmp
+*.bak
