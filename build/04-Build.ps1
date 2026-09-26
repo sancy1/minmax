@@ -1,9 +1,11 @@
 ﻿# =====================================================================
-# FILE: C:\Users\HP\Desktop\minmax\build\04-Build.ps1
+# FILE: build\04-Build.ps1
 # PURPOSE: Full release build for MinMax. Produces ONE self-contained,
 #          single-file MinMax.exe with the icon dynamically resolved
 #          from assets\, the version pulled from build\version.txt,
 #          and everything compressed + ReadyToRun for fast startup.
+#          PATH-INDEPENDENT: works on any machine or CI runner because
+#          the project root is derived from this script's own location.
 # RELATES TO:
 #   - build\version.txt        : single source of truth for the version
 #   - assets\*.ico             : dynamic icon resolution (priority below)
@@ -20,7 +22,12 @@
 $ErrorActionPreference = 'Stop'
 
 # ---------------------------- CONFIG --------------------------------
-$root        = 'C:\Users\HP\Desktop\minmax'
+# The project root is the PARENT of this script's folder.
+# This script lives at  <root>\build\04-Build.ps1
+# So $PSScriptRoot is       <root>\build
+# And Split-Path -Parent gives <root>
+# Works locally AND on GitHub Actions runners with no changes.
+$root        = Split-Path -Parent $PSScriptRoot
 $projectDir  = Join-Path $root 'src\MinMax'
 $csproj      = Join-Path $projectDir 'MinMax.csproj'
 $assetsDir   = Join-Path $root 'assets'
